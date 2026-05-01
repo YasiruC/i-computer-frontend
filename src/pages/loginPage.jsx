@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function LoginPage(){
     const [email , setEmail] = useState();
     const [password , setPassword] = useState();
+    const navigate = useNavigate();
 
     function hadleLogin(){
         axios.post(import.meta.env.VITE_API_URL + "/users/login" , {
@@ -12,14 +14,23 @@ export default function LoginPage(){
             password : password
         }).then(
             (res)=>{
-                console.log("Login Successful", res.data.token);
+                localStorage.setItem("token" , res.data.token);
+
+                if(res.data.isAdmin){
+                    // window.location.href = "/admin";
+                    navigate("/admin");
+                }else{
+                    // window.location.href = "/";
+                    navigate("/");
+                }
             }
         ).catch(
             (error)=>{
-                console.log("Login Failed", error);    
+                toast.error(error.response.data.message);    
             }
         );
     }
+    
     return(
         <div className="w-full h-full flex justify-center items-center bg-[url('/login-bg.jpg')] bg-center bg-cover">
             <div className="w-1/2 h-full">
