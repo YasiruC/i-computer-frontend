@@ -1,24 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from"react-hot-toast";
 import uploadMedia from "../../utils/mediaUpload";
 import axios from "axios"
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-export default function AdminAddProductPage(){
-    const [productId , setProductId] = useState();
-    const [name , setName] = useState();
-    const [altNames , setAltNames] = useState();
-    const [price , setPrice] = useState();
-    const [labelledPrice , setLabelledPrice] = useState();
-    const [category , setCategory] = useState();
-    const [images , setImages] = useState();
-    const [description , setDescription] = useState();
-    const [brand , setBrand] = useState();
-    const [model , setModel] = useState();
-    const [stock , setStock] = useState();
-    const [isAvailable , setIsAvailable] = useState(true);
+export default function AdminUpdateProductPage(){
+    const location = useLocation();
+    const [productId , setProductId] = useState(location.state?.productId || "");
+    const [name , setName] = useState(location.state?.name || "");
+    const [altNames , setAltNames] = useState(location.state?.altNames ? location.state.altNames.join(",") : "");
+    const [price , setPrice] = useState(location.state?.name || "");
+    const [labelledPrice , setLabelledPrice] = useState(location.state?.price || "");
+    const [category , setCategory] = useState(location.state?.category || "");
+    const [images , setImages] = useState(location.state?.images || []);
+    const [description , setDescription] = useState(location.state?.description || "");
+    const [brand , setBrand] = useState(location.state?.brand || "");
+    const [model , setModel] = useState(location.state?.model || "");
+    const [stock , setStock] = useState(location.state?.stock || 0);
+    const [isAvailable , setIsAvailable] = useState(location.state?.isAvailable || false);
 
     const navigate = useNavigate();
+
+    useEffect(
+        ()=>{
+            if(location.state == null){
+                toast.error("No product data found.Please select a product to edit");
+                navigate("/admin/products");
+            }
+        },
+        []
+    );
 
     async function handleSave(){
         try{
@@ -70,7 +81,7 @@ export default function AdminAddProductPage(){
     return(
         <div className="w-full h-full p-3 flex flex-col items-center rounded-2xl overflow-y-scroll">
             <div className="sticky top-0 w-full h-[100px] shadow-2xl bg-accent text-[#ffffff] font-semibold flex items-center justify-between p-5 rounded-lg">
-                <h1 className="text-2xl ">Add New Product</h1>
+                <h1 className="text-2xl ">Update Product</h1>
                 <div className="h-full flex items-center justify-center">
                     <button onClick={handleSave} className="ml-4 px-4 py-2 bg-specialColor rounded-lg hover:bg-amber-300">Save</button>
                     <button className="ml-4 px-4 py-2 bg-specialColor rounded-lg hover:bg-amber-300">Cancel</button>
