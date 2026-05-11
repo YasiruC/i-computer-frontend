@@ -9,15 +9,16 @@ export default function AdminUpdateProductPage(){
     const [productId , setProductId] = useState(location.state?.productId || "");
     const [name , setName] = useState(location.state?.name || "");
     const [altNames , setAltNames] = useState(location.state?.altNames ? location.state.altNames.join(",") : "");
-    const [price , setPrice] = useState(location.state?.name || "");
-    const [labelledPrice , setLabelledPrice] = useState(location.state?.price || "");
+    const [price , setPrice] = useState(location.state?.price || "");
+    const [labelledPrice , setLabelledPrice] = useState(location.state?.labelPrice || "");
     const [category , setCategory] = useState(location.state?.category || "");
-    const [images , setImages] = useState(location.state?.images || []);
+    const [images , setImages] = useState([]);
     const [description , setDescription] = useState(location.state?.description || "");
     const [brand , setBrand] = useState(location.state?.brand || "");
     const [model , setModel] = useState(location.state?.model || "");
     const [stock , setStock] = useState(location.state?.stock || 0);
     const [isAvailable , setIsAvailable] = useState(location.state?.isAvailable || false);
+    const [isUpdating, setIsUpdating] = useState(false);
 
     const navigate = useNavigate();
 
@@ -32,6 +33,7 @@ export default function AdminUpdateProductPage(){
     );
 
     async function handleSave(){
+        setIsUpdating(true);
         try{
             const token = localStorage.getItem("token");
             if(token == null){
@@ -49,7 +51,6 @@ export default function AdminUpdateProductPage(){
             const altNamesArray = altNames.split(",");
 
             const productData = {
-                productId : productId,
                 name : name,
                 altNames : altNamesArray,
                 price : price,
@@ -59,22 +60,26 @@ export default function AdminUpdateProductPage(){
                 brand : brand,
                 model : model,
                 category : category,
-                isAvailble : isAvailable,
+                isAvailable : isAvailable,
                 stock : stock
             }
 
-            await axios.post(import.meta.env.VITE_API_URL + "/products", productData ,{
+            if(urls.length == 0){
+                productData.images = location.state.images;
+            }
+
+            await axios.put(import.meta.env.VITE_API_URL + "/products/" + productId , productData ,{
                 headers : {
                     "Authorization" : "Bearer " + token
                 }
             });
 
-            toast.success("Product added successfully.");
+            toast.success("Product updated successfully.");
+            setIsUpdating(false);
             navigate("/admin/products");
-
-
         }catch(error){
-            toast.error(error?.response?.data?.message || "Failed to add product. Please try again.");
+            setIsUpdating(false);
+            toast.error(error?.response?.data?.message || "Failed to update product. Please try again.");
         }
     }
 
@@ -83,8 +88,18 @@ export default function AdminUpdateProductPage(){
             <div className="sticky top-0 w-full h-[100px] shadow-2xl bg-accent text-[#ffffff] font-semibold flex items-center justify-between p-5 rounded-lg">
                 <h1 className="text-2xl ">Update Product</h1>
                 <div className="h-full flex items-center justify-center">
-                    <button onClick={handleSave} className="ml-4 px-4 py-2 bg-specialColor rounded-lg hover:bg-amber-300">Save</button>
-                    <button className="ml-4 px-4 py-2 bg-specialColor rounded-lg hover:bg-amber-300">Cancel</button>
+                    <button 
+                        onClick={handleSave} 
+                        className="ml-4 px-4 py-2 bg-specialColor rounded-lg hover:bg-amber-300"
+                        disabled = {isUpdating}
+                    >
+                    { isUpdating ? "Updating..." : "Update"}
+                    </button>
+                    <button 
+                        className="ml-4 px-4 py-2 bg-specialColor rounded-lg hover:bg-amber-300"
+                    >
+                    Cancel
+                    </button>
                 </div>
             </div>
 
@@ -94,6 +109,7 @@ export default function AdminUpdateProductPage(){
                     <label className="block font-semibold">Product ID</label>
                     <input type="text" className="border border-gray-300 rounded-md p-2 w-full"
                         value={productId}
+                        disabled
                         onChange={(e)=>{setProductId(e.target.value)}}
                     />
                 </div>

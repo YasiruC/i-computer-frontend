@@ -17,10 +17,12 @@ export default function AdminAddProductPage(){
     const [model , setModel] = useState();
     const [stock , setStock] = useState();
     const [isAvailable , setIsAvailable] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
 
     const navigate = useNavigate();
 
     async function handleSave(){
+        setIsSaving(true);
         try{
             const token = localStorage.getItem("token");
             if(token == null){
@@ -48,7 +50,7 @@ export default function AdminAddProductPage(){
                 brand : brand,
                 model : model,
                 category : category,
-                isAvailble : isAvailable,
+                isAvailable : isAvailable,
                 stock : stock
             }
 
@@ -59,10 +61,12 @@ export default function AdminAddProductPage(){
             });
 
             toast.success("Product added successfully.");
+            setIsSaving(false);
             navigate("/admin/products");
 
 
         }catch(error){
+            setIsSaving(false);
             toast.error(error?.response?.data?.message || "Failed to add product. Please try again.");
         }
     }
@@ -72,8 +76,18 @@ export default function AdminAddProductPage(){
             <div className="sticky top-0 w-full h-[100px] shadow-2xl bg-accent text-[#ffffff] font-semibold flex items-center justify-between p-5 rounded-lg">
                 <h1 className="text-2xl ">Add New Product</h1>
                 <div className="h-full flex items-center justify-center">
-                    <button onClick={handleSave} className="ml-4 px-4 py-2 bg-specialColor rounded-lg hover:bg-amber-300">Save</button>
-                    <button className="ml-4 px-4 py-2 bg-specialColor rounded-lg hover:bg-amber-300">Cancel</button>
+                    <button 
+                        onClick={handleSave} 
+                        className="ml-4 px-4 py-2 bg-specialColor rounded-lg hover:bg-amber-300"
+                        disabled = {isSaving}
+                    >
+                    {isSaving? "Saving..." : "Save"}
+                    </button>
+                    <button 
+                        className="ml-4 px-4 py-2 bg-specialColor rounded-lg hover:bg-amber-300"
+                    >
+                    Cancel
+                    </button>
                 </div>
             </div>
 
@@ -181,7 +195,9 @@ export default function AdminAddProductPage(){
                     <label className="block font-semibold">Availability</label>
                     <select className="border border-gray-300 rounded-md p-2 w-full"
                         value={isAvailable}
-                        onChange={(e)=>{setIsAvailable(e.target.value === "true" )}}
+                        onChange={(e)=>{setIsAvailable(e.target.value)
+                            console.log(e.target.value)
+                        }}
                     >
                         <option value={true}>Available</option>
                         <option value={false}>Not Available</option>

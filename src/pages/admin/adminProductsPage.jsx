@@ -8,6 +8,7 @@ import { MdDeleteOutline, MdEditCalendar  } from "react-icons/md";
 import { TiEdit } from "react-icons/ti";
 import LoadingAnimation from "../../components/loadingAnimation.jsx";
 import ProductDeleteModal from "../../components/productDeleteModal.jsx";
+import priceFormat from "../../utils/priceFormat.js";
 
 export default function AdminProductsPage() {
     const [products, setProducts] = useState([]);
@@ -116,14 +117,14 @@ export default function AdminProductsPage() {
                                                     {/* price */}
                                                     <td className="px-5 py-3.5">
                                                         <span className="font-bold text-accent">
-                                                            ${product.price}
+                                                            ${priceFormat(product.price)}
                                                         </span>
                                                     </td>
 
                                                     {/* labelPrice */}
                                                     <td className="px-5 py-3.5">
                                                         <span className="text-secondary line-through text-xs">
-                                                            ${product.labelPrice}
+                                                            ${priceFormat(product.labelPrice)}
                                                         </span>
                                                     </td>
 
@@ -144,11 +145,11 @@ export default function AdminProductsPage() {
                                                         </span>
                                                     </td>
 
-                                                    {/* isAvailble */}
+                                                    {/* isAvailable */}
                                                     <td className="px-5 py-3.5">
-                                                        <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full ${product.isAvailble ? "bg-green-50 text-green-700" : "bg-red-50 text-red-600"}`}>
-                                                            <span className={`w-1.5 h-1.5 rounded-full ${product.isAvailble ? "bg-green-500" : "bg-red-400"}`} />
-                                                            {product.isAvailble ? "Yes" : "No"}
+                                                        <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full ${product.isAvailable ? "bg-green-50 text-green-700" : "bg-red-50 text-red-600"}`}>
+                                                            <span className={`w-1.5 h-1.5 rounded-full ${product.isAvailable ? "bg-green-500" : "bg-red-400"}`} />
+                                                            {product.isAvailable ? "Yes" : "No"}
                                                         </span>
                                                     </td>
 

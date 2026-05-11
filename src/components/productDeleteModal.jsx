@@ -3,12 +3,12 @@ import { MdDeleteOutline  } from "react-icons/md";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-export default function ProductDeleteModal(proms){
+export default function ProductDeleteModal(props){
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const product = proms.product;
-    const refresh = proms.refresh;
+    const product = props.product;
+    const refresh = props.refresh;
 
     function handleDelete(){
         const token = localStorage.getItem("token");
