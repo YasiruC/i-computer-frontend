@@ -101,14 +101,26 @@ export default function ProductOverViewPage(){
                             >
                                 Add to Cart
                             </button>
-                            <button 
-                                className="w-62.5 h-16 bg-specialColor text-white text-xl font-semibold rounded-lg cursor-pointer hover:bg-amber-500 transition-colors duration-400"
-                                onClick={()=>{
-                                    console.log(getCart());
-                                }}
+                            <Link 
+                                className="w-62.5 h-16 bg-specialColor text-white text-xl font-semibold rounded-lg cursor-pointer hover:bg-amber-500 transition-colors duration-400 flex justify-center items-center"
+                                to="/checkout"
+                                state={
+                                    [
+                                        {
+                                            product : {
+                                                productId : product.productId,
+                                                name : product.name,
+                                                image : product.images[0],
+                                                labelPrice : product.labelPrice,
+                                                price : product.price
+                                            },
+                                            quantity : 1
+                                        }
+                                    ]
+                                }
                             >
                                 Buy Now
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 </div>

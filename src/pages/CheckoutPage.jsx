@@ -3,11 +3,13 @@ import { addToCart, getCart, getCartTotal } from "../utils/cart";
 import priceFormat from "../utils/priceFormat";
 import { MdAddCircle  } from "react-icons/md";
 import { FaMinusCircle } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import CreateOrderModal from "../components/createOrderModal";
 
-export default function CartPage(){
+export default function CheckoutPage(){
 
-    const [cart, setCart] = useState(getCart);
+    const location = useLocation();
+    const [cart, setCart] = useState(location?.state);
 
     return(
         <div className="w-full min-h-full flex flex-col items-center p-5 gap-4 pb-20">
@@ -35,8 +37,14 @@ export default function CartPage(){
                                             <button 
                                                 className="text-xl font-bold cursor-pointer hover:text-accent"
                                                 onClick={()=>{
-                                                    addToCart(cartItem.product, -1);
-                                                    setCart(getCart());
+                                                    let newCart = [...cart];
+                                                    newCart[index].quantity -= 1;
+
+                                                    if(newCart[index].quantity <=0 ){
+                                                        newCart.splice(index, 1);
+                                                    }
+                                                    setCart(newCart)
+                                                        
                                                 }}
                                             >
                                             <FaMinusCircle />
@@ -45,8 +53,9 @@ export default function CartPage(){
                                             <button 
                                                 className="text-2xl font-bold cursor-pointer hover:text-accent"
                                                 onClick={()=>{
-                                                    addToCart(cartItem.product, 1);
-                                                    setCart(getCart());
+                                                    let newCart = [...cart];
+                                                    newCart[index].quantity += 1;
+                                                    setCart(newCart)
                                                 }}
                                             >
                                             <MdAddCircle  />
@@ -62,13 +71,7 @@ export default function CartPage(){
             }
 
             <div className="bg-white w-[500px] border rounded-t-lg shadow-2xl shadow-gray-300 flex items-center justify-between p-3 fixed bottom-0">
-                <Link 
-                    className="bg-accent text-white px-4 py-2 rounded-lg font-semibold hover:bg-specialColor hover:text-accent transition-all duration-200"
-                    to="/checkout"
-                    state={cart}
-                >
-                    Checkout
-                </Link>
+                <CreateOrderModal cart={cart} />
                 <p className="text-xl font-bold ml-4">{priceFormat(getCartTotal(cart))}</p>
             </div>
 

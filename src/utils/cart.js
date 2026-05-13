@@ -13,7 +13,7 @@ export function getCart(){
 export function addToCart(product, quantity){
     const cart = getCart();
 
-    const existingProductIndex = cart.findIndex(
+    const existingProductIndex = cart.findIndex( //findIndex is array function
         (cartItem)=>{
             return cartItem.product.productId == product.productId
         }
@@ -46,4 +46,14 @@ export function addToCart(product, quantity){
     const cartString = JSON.stringify(cart);
 
     localStorage.setItem("cart", cartString);
+}
+
+export function getCartTotal(cart){
+    let total = 0;
+
+    for(let i = 0; i < cart.length; i++){
+        total += (cart[i].product.price * cart[i].quantity);
+    }
+
+    return total;
 }
