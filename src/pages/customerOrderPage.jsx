@@ -5,12 +5,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { MdDeleteOutline, MdEditCalendar  } from "react-icons/md";
-import LoadingAnimation from "../../components/loadingAnimation.jsx";
-import ProductDeleteModal from "../../components/productDeleteModal.jsx";
-import priceFormat from "../../utils/priceFormat.js";
-import OrderDetailsModal from "../../components/orderDetailsModal.jsx";
+import LoadingAnimation from "../components/loadingAnimation.jsx";
+import ProductDeleteModal from "../components/productDeleteModal.jsx";
+import priceFormat from "../utils/priceFormat.js";
+import OrderDetailsModal from "../components/orderDetailsModal.jsx";
 
-export default function AdminOrdersPage() {
+export default function CustomerOrdersPage() {
     const [orders, setOrders] = useState([]);
     const [pageSize, setPageSize] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);

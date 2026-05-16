@@ -1,14 +1,53 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdDeleteOutline  } from "react-icons/md";
 import { FaEye, FaPhoneAlt, FaHome   } from "react-icons/fa";
 import axios from "axios";
+import api from "../utils/api.js"
 import toast from "react-hot-toast";
 import priceFormat from "../utils/priceFormat";
 
 export default function OrderDetailsModal(props){
-
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const order = props.order;
+    const refresh = props.refresh;
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [notes, setNotes] = useState(order.notes);
+    const [status, setStatus] = useState(order.orderState);
+    const [isUpdating, setIsUpdating] = useState(false);
+    const [user, setUser] = useState(null);
+    useEffect(()=>{
+        const token = localStorage.getItem("token");
+        api.get("/users/profile",{
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then((response) => { 
+            setUser(response.data);
+        }).catch((error)=>{
+            console.error("Error fetching user profile:", error);
+        });
+    },[]);
+
+    async function updateOrder(){
+        setIsUpdating(true);
+        const token = localStorage.getItem("token");
+        try{
+            await api.put("/orders/" + order.orderId , {
+                notes : notes,
+                status : status
+            },{
+                headers : {
+                    Authorization : "Bearer " + token
+                }
+            });
+            toast.success("Order update successfully");
+            setIsUpdating(false);
+            refresh()
+        }catch(error){
+            setIsUpdating(false);
+            console.log(error);
+            toast.error(error?.response?.data?.message);
+        }
+    }
             
     return(
         <>
@@ -35,12 +74,19 @@ export default function OrderDetailsModal(props){
                             <p className="text-gray-600 mr-8">{order.email}</p>
                             <FaPhoneAlt /><p className="text-gray-600 mr-8 ml-2">{order.phone}</p>
                         </div> 
-                        <div className="flex flex-row  items-center pb-3">
-                            <FaHome /><p className="ml-1 text-sm text-gray-700"><span className="font-semibold text-accent">Kasun Malshan</span>, no 11 , Galle , Southern , 80000</p>
+                        <div className="flex flex-row  items-center mb-2">
+                            <FaHome /><p className="ml-1 text-sm text-gray-700"><span className="font-semibold text-accent">{order.firstName+" "+order.lastName}</span>, {order.addressLineOne+" "+order.addressLineTwo}</p>
+                        </div>
+                        <div className="flex flex-row  items-center mb-2">
+                            <p className="mr-8 text-sm text-gray-700">Order Date: {new Date(order.date).toLocaleDateString()}</p>
+                            <p className="text-sm font-semibold text-specialColor p-1 rounded bg-specialColor/20">{order.orderState}</p>
+                        </div>
+                        <div className="flex flex-row  items-center w-full mb-3">
+                            <p className="mr-8 text-sm text-gray-700"><span className="font-bold text-accent">Notes: </span>{order.notes || "No notes available"}</p>
                         </div>
 
                         {/* Product List */}
-                        <div className="h-[400px] overflow-y-scroll pb-10 space-y-3">
+                        <div className="h-[200px] overflow-y-scroll pb-3 space-y-3">
 
                         {
                             order.items.map(
@@ -64,13 +110,32 @@ export default function OrderDetailsModal(props){
                         </div>
 
                         {/* Bottom Total */}
-                        <div className="bg-gray-400 rounded-md p-4 flex justify-end items-center">
+                        <div className="bg-gray-300 rounded-md mb-3 p-4 flex justify-end items-center">
                             <p className="text-lg font-bold">{priceFormat(order.total)}</p>
                         </div>
 
+                        {
+                            user.isAdmin &&
+                            <div className="bg-gray-300 rounded-md p-4 flex justify-between items-center">
+                                <div className="flex flex-col w-1/2">
+                                    <label className="text-xs font-bold mb-1">Edit Notes:</label>
+                                    <textarea type="text" value={notes} className="w-full text-sm bg-gray-200 text-gray-700 rounded" onChange={(e)=>{ setNotes(e.target.value) }}></textarea>
+                                </div>
+                                <div className="flex flex-col ">
+                                    <label className="text-xs font-bold mb-1">Update Status:</label>
+                                    <select className="outline-none px-3 text-xs font-semibold py-2 bg-specialColor/20 text-specialColor rounded" value={status} onChange={(e)=>{setStatus(e.target.value)}}>
+                                        <option value="pending">Pending</option>
+                                        <option value="processing">Processing</option>
+                                        <option value="shipped">Shipped</option>
+                                        <option value="delivered">Delivered</option>
+                                    </select>
+                                </div>
+                                <button className="ml-2 px-4 py-2 bg-specialColor/90 text-sm font-semibold text-white rounded hover:" onClick={updateOrder}>{isUpdating ? "Wait..." : "Update"}</button>
+                            </div>
+                        }
                     </div>
-
-</div>
+                </div>
+                
             }
             
         </>
