@@ -39,6 +39,7 @@ export default function ProductPage(){
                     }
                 )
             }
+            <div className=" w-full h-[80px] lg:h-0.5"></div>
         </div>
     );
 }

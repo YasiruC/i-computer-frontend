@@ -9,6 +9,8 @@ import CartPage from "./cartPage";
 import CheckoutPage from "./CheckoutPage";
 import CustomerOrdersPage from "./customerOrderPage";
 import UserProfilePage from "./userProfilePage";
+import BottomNavigationBar from "../components/bottomNavigationBar";
+import NotFoundPage from "./notFoundPage";
 
 export default function HomePage(){
 
@@ -17,7 +19,7 @@ export default function HomePage(){
             <Header />
             <div className="w-full h-[calc(100%-100px)] overflow-y-scroll">
                 <Routes >
-                    <Route path="/" element={<h1>Homa page</h1>} />
+                    <Route path="/" element={<h1>Home page</h1>} />
                     <Route path="/products" element={<ProductPage />} />
                     <Route path="/orders" element={<CustomerOrdersPage />} />
                     <Route path="/contact-us" element={<h1>Contact Us page</h1>} />
@@ -25,7 +27,9 @@ export default function HomePage(){
                     <Route path="/cart" element={<CartPage />} />
                     <Route path="/checkout" element={<CheckoutPage />} />
                     <Route path="/setting" element={<UserProfilePage />} />
+                    <Route path="/*" element={<NotFoundPage />} />
                 </Routes>
+                <BottomNavigationBar />
             </div>
 
         </div>

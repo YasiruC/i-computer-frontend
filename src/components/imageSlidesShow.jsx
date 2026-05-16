@@ -8,9 +8,9 @@ export default function ImageSlideShow(props){
     const productName = props.productName || ""
 
     return(
-        <div className="w-[500px] h-[630px] flex flex-col my-8 shadow-2xl shadow-accent rounded-xl overflow-hidden">
+        <div className="w-[500px] lg:h-[630px] flex flex-col my-8 shadow-sm shadow-accent rounded-xl overflow-hidden">
             <img src={images[activeImage]} alt={productName} className="w-full aspect-square object-cover"/>
-            <div className="w-full h-[100px] flex justify-center items-center gap-5 my-5">
+            <div className="w-full h-[90px] flex justify-center items-center gap-5 my-5">
                 {
                     images.map(
                         (image , index)=>{

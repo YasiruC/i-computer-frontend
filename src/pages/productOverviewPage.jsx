@@ -46,12 +46,12 @@ export default function ProductOverViewPage(){
 
             {
                 status == "success" && 
-                <div className="w-full h-full flex">
-                    <div className="w-1/2 h-full flex justify-center items-center">
+                <div className="w-full h-full flex flex-col lg:flex-row jucstify-center items-center">
+                    <div className="w-[90%] lg:w-1/2 h-full flex justify-center items-center">
                         <ImageSlideShow images = {product.images} productName = {product.name} />
                     </div>
 
-                    <div className="w-1/2 h-full flex flex-col p-5 ">
+                    <div className="w-[90%] lg:w-1/2 h-full flex flex-col lg:p-5 ">
                         <h1 className="text-3xl font-bold text-accent  mt-5">
                             {product.name}
                             {
@@ -86,17 +86,18 @@ export default function ProductOverViewPage(){
                             <span className="text-lg text-secondary font-semibold ">{product.category}</span>
                         </div>
 
-                        <p className="text-lg mt-5">
+                        <p className="text-lg mt-5 mb-[180px] lg:mb-0">
                             {
                                 product.description
                             }
                         </p>
 
-                        <div className="flex mt-5 gap-5">
+                        <div className="flex mt-5 gap-5 fixed bottom-22 right-0 p-2 w-full backdrop-blur-sm lg:static lg:p-0 lg:backdrop-blur-none">
                             <button 
                                 className="w-62.5 h-16 bg-blue-500 text-white text-xl font-semibold rounded-lg cursor-pointer hover:bg-blue-700 transition-colors duration-400"
                                 onClick={()=>{
                                     addToCart(product,1);
+                                    toast.success("Product added to cart");
                                 }}
                             >
                                 Add to Cart
