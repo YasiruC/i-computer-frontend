@@ -27,7 +27,7 @@ export default function UserProfile(){
     return(
         user ? (
             <div className="w-[58%] h-full flex items-center justify-center text-sm font-semibold text-white gap-2">
-                <img src={user.image} alt="" className="w-10 h-10 rounded-full object-cover bg-white/95  text-white" />
+                <img src={user.image} referrerPolicy="no-referrer" alt="" className="w-10 h-10 rounded-full object-cover bg-white/95  text-white" />
                <select className="appearance-none  text-white text-[15px] font-semibold rounded-xl px-4 py-2 shadow-md cursor-pointer outline-none transition-all duration-200 hover:bg-hoverColor hover:shadow-lg  text-center"
                     onChange={(e)=>{
                         if(e.target.value === "option1"){
