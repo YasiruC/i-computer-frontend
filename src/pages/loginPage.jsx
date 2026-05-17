@@ -89,7 +89,7 @@ export default function LoginPage(){
 
                     <p className="mb-6 w-3/4 text-right text-secondary">
                         Forget password?
-                        <Link to="/forget-password" className="text-accent"> Click here</Link>
+                        <Link to="/forgot-password" className="text-accent"> Click here</Link>
                     </p>
 
                     <button onClick={hadleLogin} className="mb-6 w-3/4 p-3 bg-specialColor text-[#ffffff] text-xl rounded-lg ">
