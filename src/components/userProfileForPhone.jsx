@@ -28,7 +28,7 @@ export default function UserProfileForPhone(){
     return(
         user ? (
             <div className="h-full relative aspect-square rounded-xl overflow-hidden">
-                <img src={user.image} alt="" className="object-cover bg-white/95 text-white absolute" />
+                <img src={user.image} alt="" className={`object-cover text-white absolute ${user.image === "/image/default-profile.png" ? "bg-accent p-4" : "bg-white/95"}`}/>
                <select className="w-full absolute bg-transparent text-transparent aspect-square outline-none text-center"
                     onChange={(e)=>{
                         if(e.target.value === "option1"){

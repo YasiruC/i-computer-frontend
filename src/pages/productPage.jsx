@@ -13,7 +13,6 @@ export default function ProductPage(){
             if(!isLoading){
                 axios.get(import.meta.env.VITE_API_URL + "/products").then(
                     (response)=>{
-                        console.log(response)
                         setProducts(response.data);
                         setIsLoading(true);
                     }
